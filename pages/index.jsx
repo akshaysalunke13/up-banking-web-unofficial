@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -28,6 +28,21 @@ export default function Index() {
   // Functions to move between pages.
   const nextPage = () => setPage(p => p + 1 === APP_PAGES ? p : p + 1)
   const prevPage = () => setPage(p => p >= 1 ? p - 1 : p)
+
+  useEffect(() => {
+    if (token !== null) {
+      localStorage.setItem('upToken', token);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token || localStorage.getItem('upToken')) {
+      setToken(localStorage.getItem('upToken'));
+    } else {
+      localStorage.removeItem('upToken');
+      setToken(null);
+    }
+  }, []);
 
   // The entry page to introduce users to the site/experiment.
   const Intro = () =>
